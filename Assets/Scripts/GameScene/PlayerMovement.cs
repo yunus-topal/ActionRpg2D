@@ -30,27 +30,35 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
+        if(Time.timeScale == 0) return;
+        
+        HandleMovement();
+        HandleAttack();
+    }
+
+    private void HandleMovement() {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector2 movement = new Vector2(horizontalInput, verticalInput).normalized * speed;
 
         _rb.velocity = movement;
-
         _animator.SetFloat(Speed, movement.magnitude);
 
         if (movement != Vector2.zero) {
             _animator.SetFloat(Horizontal, movement.x);
             _animator.SetFloat(Vertical, movement.y);
         }
+    }
 
+    private void HandleAttack() {
         if (Input.GetKey(KeyCode.Mouse0) && Time.time - _lastAttackTime >= attackCooldown) {
             _animator.SetTrigger(AttackTrigger);
             _lastAttackTime = Time.time;
         }
     }
 
-    public void Attack(int attackDirection) {
+    private void ExecuteAttack(int attackDirection) {
         Collider2D[] hitColliders;
         switch (attackDirection) {
             case 0:
