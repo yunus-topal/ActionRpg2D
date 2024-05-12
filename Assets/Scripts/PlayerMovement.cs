@@ -1,66 +1,53 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
-    [Header("Attack Directions")]
-    [SerializeField] private GameObject attackBack;
+    [Header("Attack Directions")] [SerializeField]
+    private GameObject attackBack;
+
     [SerializeField] private GameObject attackFront;
     [SerializeField] private GameObject attackLeft;
     [SerializeField] private GameObject attackRight;
-    
-    
-    [Header("Stats")]
-    [SerializeField] private float speed;
+
+
+    [Header("Stats")] [SerializeField] private float speed;
     [SerializeField] private float attackCooldown = 0.5f;
-    
-    private bool canAttack = true;
-    
-    
+
+    // private fields
+    private float _lastAttackTime = 0.0f; // Time of the last attack
     private Rigidbody2D _rb;
     private Animator _animator;
 
-    private void Start()
-    {
+    // animation hashes
+    private static readonly int Horizontal = Animator.StringToHash("Horizontal");
+    private static readonly int Speed = Animator.StringToHash("Speed");
+    private static readonly int Vertical = Animator.StringToHash("Vertical");
+    private static readonly int AttackTrigger = Animator.StringToHash("attack_trigger");
+
+    private void Start() {
         _rb = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
     }
 
-    private void Update()
-    {
+    private void Update() {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
         Vector2 movement = new Vector2(horizontalInput, verticalInput).normalized * speed;
 
         _rb.velocity = movement;
-        
-        _animator.SetFloat("Speed", movement.magnitude);
 
-        if(movement != Vector2.zero){
-            _animator.SetFloat("Horizontal", movement.x);
-            _animator.SetFloat("Vertical", movement.y);
+        _animator.SetFloat(Speed, movement.magnitude);
+
+        if (movement != Vector2.zero) {
+            _animator.SetFloat(Horizontal, movement.x);
+            _animator.SetFloat(Vertical, movement.y);
         }
-        
-        if(Input.GetKey(KeyCode.Mouse0) && canAttack) {
-            _animator.SetTrigger("attack_trigger");
-            canAttack = false;
+
+        if (Input.GetKey(KeyCode.Mouse0) && Time.time - _lastAttackTime >= attackCooldown) {
+            _animator.SetTrigger(AttackTrigger);
+            _lastAttackTime = Time.time;
         }
-        
-        if(!canAttack){
-            attackCooldown -= Time.deltaTime;
-            if(attackCooldown <= 0){
-                canAttack = true;
-                attackCooldown = 0.5f;
-            }
-        }
-        
-    }
-    
-    void OnCollisionEnter2D(Collision2D collision){
-        Debug.Log("Collision with " + collision.gameObject.name);
     }
 
     public void Attack(int attackDirection) {
@@ -90,6 +77,5 @@ public class PlayerMovement : MonoBehaviour {
         foreach (var collider in hitColliders) {
             // TODO: Add damage to the enemy
         }
-        
     }
 }
