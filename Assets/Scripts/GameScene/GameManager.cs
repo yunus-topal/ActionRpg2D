@@ -6,20 +6,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private Slider soundVolumeSlider;
-    [SerializeField] private Slider musicVolumeSlider;
     private void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
             StopGame();
         }
-    }
-    
-    public void SetSoundVolume() {
-        PlayerPrefs.SetFloat("SoundVolume", soundVolumeSlider.value);
-    }
-    
-    public void SetMusicVolume() {
-        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
     }
 
     public void StopGame() {

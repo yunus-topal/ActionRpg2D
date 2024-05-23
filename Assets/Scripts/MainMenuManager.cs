@@ -7,20 +7,8 @@ public class MainMenuManager : MonoBehaviour {
     [SerializeField] private GameObject settingsPanel;
     [SerializeField] private GameObject mainMenuPanel;
     
-    [SerializeField] private Slider soundVolumeSlider;
-    [SerializeField] private Slider musicVolumeSlider;
-    
-    
     public void StartGame() {
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
-    }
-
-    public void SetSoundVolume() {
-        PlayerPrefs.SetFloat("SoundVolume", soundVolumeSlider.value);
-    }
-    
-    public void SetMusicVolume() {
-        PlayerPrefs.SetFloat("MusicVolume", musicVolumeSlider.value);
     }
     
     public void OpenSettings() {
