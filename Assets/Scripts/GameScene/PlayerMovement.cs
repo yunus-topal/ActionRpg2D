@@ -59,28 +59,21 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void ExecuteAttack(int attackDirection) {
-        Collider2D[] hitColliders;
-        switch (attackDirection) {
-            case 0:
+        Collider2D[] hitColliders = attackDirection switch {
+            0 =>
                 // take 0.6 radius around the back 
-                hitColliders = Physics2D.OverlapCircleAll(attackBack.transform.position, 0.6f);
-                break;
-            case 1:
+                Physics2D.OverlapCircleAll(attackBack.transform.position, 0.6f),
+            1 =>
                 // take 0.6 radius around the right
-                hitColliders = Physics2D.OverlapCircleAll(attackRight.transform.position, 0.6f);
-                break;
-            case 2:
+                Physics2D.OverlapCircleAll(attackRight.transform.position, 0.6f),
+            2 =>
                 // take 0.6 radius around the front
-                hitColliders = Physics2D.OverlapCircleAll(attackFront.transform.position, 0.6f);
-                break;
-            case 3:
+                Physics2D.OverlapCircleAll(attackFront.transform.position, 0.6f),
+            3 =>
                 // take 0.6 radius around the left
-                hitColliders = Physics2D.OverlapCircleAll(attackLeft.transform.position, 0.6f);
-                break;
-            default:
-                hitColliders = Array.Empty<Collider2D>();
-                break;
-        }
+                Physics2D.OverlapCircleAll(attackLeft.transform.position, 0.6f),
+            _ => Array.Empty<Collider2D>()
+        };
 
         foreach (var collider in hitColliders) {
             // TODO: Add damage to the enemy

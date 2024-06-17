@@ -27,10 +27,7 @@ public class EnemyMovement : MonoBehaviour {
         Vector3 direction = _player.transform.position - position;
 
         if (direction.magnitude < attackDistance && Time.time - _lastAttackTime >= attackCooldown) {
-            _animator.SetFloat("Speed", 0f);
-            _animator.SetTrigger("attack_trigger");
-            _lastAttackTime = Time.time;
-            _rb.velocity = Vector2.zero;
+            Attack();
             return;
         }
         
@@ -47,5 +44,10 @@ public class EnemyMovement : MonoBehaviour {
     }
     private void Attack() {
         Debug.Log("Attacking player");
+        _animator.SetFloat("Speed", 0f);
+        _animator.SetTrigger("attack_trigger");
+        _lastAttackTime = Time.time;
+        _rb.velocity = Vector2.zero;
+        // todo overlap attack area.         
     }
 }
