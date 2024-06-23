@@ -7,8 +7,9 @@ namespace Characters.Enemy {
     public class EnemyStatus : MonoBehaviour
     {
         [SerializeField] private Enemy enemy;
-        private int currHealth;
+        public Enemy Enemy => enemy;
         
+        private int _currHealth;
         private Animator _animator;
         private static readonly int HitTrigger = Animator.StringToHash("hit_trigger");
 
@@ -16,15 +17,14 @@ namespace Characters.Enemy {
             _animator = GetComponent<Animator>();
             if(enemy == null) {
                 throw new NullReferenceException("Enemy is not set in the inspector!");
-                Destroy(this);
             }
-            currHealth = enemy.MaxHealth;
+            _currHealth = enemy.MaxHealth;
         }
 
         public void TakeDamage(int damage = 0) {
-            currHealth -= damage;
+            _currHealth -= damage;
             _animator.SetTrigger(HitTrigger);
-            if (currHealth <= 0) {
+            if (_currHealth <= 0) {
                 // start dying animation in the future
                 Death();
             }
@@ -33,7 +33,7 @@ namespace Characters.Enemy {
         public void Death() {
             // play death animation
             //_animator.SetTrigger("isDead", true);
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }

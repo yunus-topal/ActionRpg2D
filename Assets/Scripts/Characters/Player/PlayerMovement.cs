@@ -19,6 +19,7 @@ namespace Characters.Player {
         private float _lastAttackTime = 0.0f; // Time of the last attack
         private Rigidbody2D _rb;
         private Animator _animator;
+        private bool _isAttacking;
 
         // animation hashes
         private static readonly int Horizontal = Animator.StringToHash("Horizontal");
@@ -32,7 +33,7 @@ namespace Characters.Player {
         }
 
         private void Update() {
-            if(Time.timeScale == 0) return;
+            if(Time.timeScale == 0 || _isAttacking) return;
         
             HandleMovement();
             HandleAttack();
@@ -57,6 +58,7 @@ namespace Characters.Player {
             if (Input.GetKey(KeyCode.Mouse0) && Time.time - _lastAttackTime >= attackCooldown) {
                 _animator.SetTrigger(AttackTrigger);
                 _lastAttackTime = Time.time;
+                _isAttacking = true;
             }
         }
 
@@ -83,6 +85,10 @@ namespace Characters.Player {
                     collider.gameObject.GetComponent<EnemyStatus>().TakeDamage(damage);
                 }
             }
+        }
+        
+        public void FinishAttack() {
+            _isAttacking = false;
         }
     }
 }
