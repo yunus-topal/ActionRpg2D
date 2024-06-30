@@ -54,7 +54,7 @@ namespace Managers {
                 List<Choice> choices = _story.currentChoices;
                 foreach (Choice choice in choices) {
                     GameObject button = Instantiate(optionPrefab, optionsParent.transform);
-                    button.GetComponent<TextMeshProUGUI>().text = choice.text;
+                    button.GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
                     button.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate { _story.ChooseChoiceIndex(choice.index);
                         DisplayNextSentence();
                     });
